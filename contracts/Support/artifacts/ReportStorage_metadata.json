@@ -1,0 +1,78 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "listingfee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"stateVariables": {
+				"idToListedToken": {
+					"details": "This mapping mas tokenId to the NFT info and is helpful when retrieving details about a tokenId"
+				},
+				"listPrice": {
+					"details": "The fee charged by the marketplace to be allowed to list an NFT"
+				},
+				"owner": {
+					"details": "Owner is the contract address that created the smart contract"
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Support/ReportStorage.sol": "ReportStorage"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Support/Model.sol": {
+			"keccak256": "0xce3d592f0b327ba4fa5ef1ef229263237da6deedf0306a0c750ead3eeb241854",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://82d0b74e644713a82ab7cfd2fcdaab107db75a148291c72fc9fb41e3a60ccb5e",
+				"dweb:/ipfs/QmZD44mJufGwtVpkr7xpwWww9FV9hjDmnYWRF1npNmM2SQ"
+			]
+		},
+		"contracts/Support/ReportStorage.sol": {
+			"keccak256": "0x2ddd7ecae8ba4263d9a2db3675c5297f762ad8bfa600b8bd3896816a3e0f3cd8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://66696bb364b6102e2e93fb4fd803044498aaa0c3df6f8c64e25c8eeeca3c9d5b",
+				"dweb:/ipfs/QmYUvfYXNSVQfJ2n7tS3pwYJ41gZXL8apriQa9z3scnGUx"
+			]
+		}
+	},
+	"version": 1
+}

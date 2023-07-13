@@ -1,0 +1,53 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"stateVariables": {
+				"_operatorApprovals": {
+					"details": "Mapping from owner to operator approvals"
+				},
+				"_tokenApprovals": {
+					"details": "Mapping from token ID to approved address"
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Support/Storage.sol": "Storage"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Support/Storage.sol": {
+			"keccak256": "0xf88583a0db9e56184141f182a595d419162ee537a4d8e67f5d92b0e0272793f0",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://683247b71852d297134b6a7ad84b788ffd894fb482020c150018b86ac1628fe3",
+				"dweb:/ipfs/QmSB3Lg7nZdQZE9cAgA4Zn4TYNwm4rMzszamQFeuJZ5aHZ"
+			]
+		}
+	},
+	"version": 1
+}
