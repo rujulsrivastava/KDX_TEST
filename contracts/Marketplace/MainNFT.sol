@@ -1,21 +1,22 @@
-// SPDX-License-Identifier: MIT
+// // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts@4.9.2/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts@4.9.2/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts@4.9.2/access/Ownable.sol";
+import "@openzeppelin/contracts@4.9.2/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts@4.9.2/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts@4.9.2/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts@4.9.2/access/Ownable.sol";
+import "@openzeppelin/contracts@4.9.2/utils/Counters.sol";
 
-contract MainNFT is ERC721, Ownable {
+
+contract MainNFT is ERC721, ERC721URIStorage, Ownable {
+    using Counters for Counters.Counter;
+
     using SafeMath for uint256;
-
-    struct TokenData {
-        string ipfsHash;
-        uint256 timestamp;
-        uint256 price;
-        bool isListed;
-    }
-
     mapping(uint256 => TokenData) private _tokenData;
     mapping(address => bool) private _authorizedAddresses;
 
@@ -25,10 +26,29 @@ contract MainNFT is ERC721, Ownable {
     event TokenListed(uint256 indexed tokenId, uint256 price);
     event TokenSold(uint256 indexed tokenId, address indexed buyer, address indexed seller, uint256 price);
 
-    constructor(address paymentTokenAddress) ERC721("MainNFT", "MFT") {
-        _paymentToken = IERC20(paymentTokenAddress);
-        _listingFee = 0.001 ether;
+    struct TokenData {
+        string ipfsHash;
+        uint256 timestamp;
+        uint256 price;
+        bool isListed;
     }
+
+    Counters.Counter private _tokenIdCounter;
+
+    constructor(address paymentTokenAddress) ERC721("MainNFT", "MFT") {
+        // _paymentToken = IERC20(paymentTokenAddress);
+        // _listingFee = 0.0001 ether;
+    }
+
+    function safeMint(address to, string memory uri) public onlyOwner {
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+        // _setTokenData(tokenId, ipfsHash, block.timestamp, 0, false);
+    }
+
+   
 
     modifier onlyTokenOwner(uint256 tokenId) {
         require(ownerOf(tokenId) == msg.sender, "MainNFT: Only token owner can perform this action");
@@ -48,15 +68,14 @@ contract MainNFT is ERC721, Ownable {
         _authorizedAddresses[unauthorizedAddress] = false;
     }
 
-    function mint(
-        address to,
-        uint256 tokenId,
-        string memory ipfsHash
-    ) external onlyAuthorized {
-        _safeMint(to, tokenId);
-        _setTokenData(tokenId, ipfsHash, block.timestamp, 0, false);
+
+
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
     }
 
+    
     function getTokenData(uint256 tokenId)
         external
         view
@@ -116,98 +135,46 @@ contract MainNFT is ERC721, Ownable {
         bool isListed
     ) internal {
         _tokenData[tokenId] = TokenData(ipfsHash, timestamp, price, isListed);
+    
+    }
+
+
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }
 
 
 
 
-// pragma solidity ^0.8.9;
-
-// // OpenZeppelin modules
-// import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-// import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
-// import "ErrorHandling.sol";
-// import "Storage.sol";
-
-
-// contract NFT is ERC1155,
-//     NFTStorage
-//     {
-
-//     /// @dev Id for NFTs using Counters
-//     using CountersUpgradeable for CountersUpgradeable.Counter;
-//     CountersUpgradeable.Counter internal tokenIds;
-//     address contractAddress;
-
-//   constructor() ERC1155("ipfs://QmeRChz9s7H9fPTK1CAu3ETJpg8tFHKdKMbfPcfaVRpGRa/1.json") {
-//         contractAddress = 0x601aAF38C9D3EC1d4b378d0E527D2a538a4D9Dff;
-//     }
-
-//     function mintNFT(uint64 _tokenId, uint64 _quantity)
-//         public
-//         returns (uint256)
-//     {
-//         tokenIds.increment();
-//         uint256 newItemId = tokenIds.current();
-//         _mint(msg.sender, _tokenId, _quantity, "");
-//         setApprovalForAll(contractAddress, true);
-//         return newItemId;
-//     }
-
-  
- 
+    // function mint(
+    //     // address to,
+    //     uint256 tokenId,
+    //     string memory ipfsHash
+    // ) external onlyAuthorized {
+    //     _safeMint(to, tokenId);
+    //     
+    // }
 
 
-//     function _requireMinted(uint256 tokenId) internal view virtual {
-//         require(_exists(tokenId), "ERC1155: invalid token ID");
-//     }
+    
 
-//     function getApproved(uint256 tokenId)
-//         public
-//         view
-//         virtual
-//         returns (address)
-//     {
-//         _requireMinted(tokenId);
-//         return _tokenApprovals[tokenId];
-//     }
-
-//     function isApprovedForAll(address owner, address operator)
-//         public
-//         view
-//         virtual
-//         override
-//         returns (bool)
-//     {
-//         return _operatorApprovals[owner][operator];
-//     }
-
-//     function _ownerOf(uint256 tokenId) internal view virtual returns (address) {
-//         return _owners[tokenId];
-//     }
-
-//     function ownerOf(uint256 tokenId) public view virtual returns (address) {
-//         address owner = _ownerOf(tokenId);
-//         require(owner != address(0), "ERC721: invalid token ID");
-//         return owner;
-//     }
-
-//     function _exists(uint256 tokenId) internal view virtual returns (bool) {
-//         return _ownerOf(tokenId) != address(0);
-//     }
-
-//     function _isApprovedOrOwner(address spender, uint256 tokenId)
-//         internal
-//         view
-//         virtual
-//         returns (bool)
-//     {
-//         address owner = ownerOf(tokenId);
-//         return (spender == owner ||
-//             isApprovedForAll(owner, spender) ||
-//             getApproved(tokenId) == spender);
-//     }
+    
 
 
-// }
+
